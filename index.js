@@ -39,12 +39,7 @@ function fibsRecursive(reptitions) {
 
 console.log(fibsRecursive(4));
 
-function mergeSort(unsortedArray) {
-  if (unsortedArray.length <= 1) {
-    const sortedArray = unsortedArray;
-    return sortedArray;
-  }
-
+function splitArrayInHalf(unsortedArray) {
   let leftSideMidPoint;
   let rightSideMidPoint;
 
@@ -62,9 +57,10 @@ function mergeSort(unsortedArray) {
     unsortedArray.length
   );
 
-  let sortedLeftArray = mergeSort(leftArray);
-  let sortedRightArray = mergeSort(rightArray);
+  return { leftArray, rightArray };
+}
 
+function mergeSortedArrays(sortedLeftArray, sortedRightArray) {
   let sortedArray = [];
 
   while (sortedLeftArray.length > 0 || sortedRightArray.length > 0) {
@@ -89,6 +85,22 @@ function mergeSort(unsortedArray) {
   }
 
   return sortedArray;
+}
+
+function mergeSort(unsortedArray) {
+  if (unsortedArray.length <= 1) {
+    const sortedArray = unsortedArray;
+    return sortedArray;
+  }
+
+  const halvedArrays = splitArrayInHalf(unsortedArray);
+
+  const { leftArray, rightArray } = halvedArrays;
+
+  const sortedLeftArray = mergeSort(leftArray);
+  const sortedRightArray = mergeSort(rightArray);
+
+  return mergeSortedArrays(sortedLeftArray, sortedRightArray);
 }
 
 const testArray = [1, 5, 4, 2, 3, 7, 6, -10];
