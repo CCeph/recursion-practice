@@ -38,3 +38,58 @@ function fibsRecursive(reptitions) {
 }
 
 console.log(fibsRecursive(4));
+
+function mergeSort(unsortedArray) {
+  if (unsortedArray.length <= 1) {
+    const sortedArray = unsortedArray;
+    return sortedArray;
+  }
+
+  let leftSideMidPoint;
+  let rightSideMidPoint;
+
+  if (unsortedArray.length % 2 === 1) {
+    leftSideMidPoint = Math.floor(unsortedArray.length / 2);
+    rightSideMidPoint = Math.ceil(unsortedArray.length / 2);
+  } else {
+    leftSideMidPoint = unsortedArray.length / 2 - 1;
+    rightSideMidPoint = unsortedArray.length / 2;
+  }
+
+  const leftArray = unsortedArray.slice(0, leftSideMidPoint + 1);
+  const rightArray = unsortedArray.slice(
+    rightSideMidPoint,
+    unsortedArray.length
+  );
+
+  let sortedLeftArray = mergeSort(leftArray);
+  let sortedRightArray = mergeSort(rightArray);
+
+  let sortedArray = [];
+
+  while (sortedLeftArray.length > 0 || sortedRightArray.length > 0) {
+    // Check if either side is empty, then add everything from the other side to save time.
+    if (sortedLeftArray.length === 0) {
+      sortedArray = sortedArray.concat(sortedRightArray);
+      sortedRightArray = [];
+      break;
+    } else if (sortedRightArray.length === 0) {
+      sortedArray = sortedArray.concat(sortedLeftArray);
+      sortedLeftArray = [];
+      break;
+    }
+
+    if (sortedLeftArray[0] < sortedRightArray[0]) {
+      sortedArray.push(sortedLeftArray[0]);
+      sortedLeftArray.shift();
+    } else {
+      sortedArray.push(sortedRightArray[0]);
+      sortedRightArray.shift();
+    }
+  }
+
+  return sortedArray;
+}
+
+const testArray = [1, 5, 4, 2, 3, 7, 6, -10];
+console.log(`Sorted Array: ${mergeSort(testArray)}`);
